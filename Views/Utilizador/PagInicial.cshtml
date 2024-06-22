@@ -1,0 +1,80 @@
+﻿@model List<Projeto.Models.Post>
+
+<style>
+    .post-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    .post-date {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        font-size: smaller;
+        opacity: 0.7;
+    }
+
+    .post-form {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 10px;
+        position: relative;
+    }
+
+    #Texto {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .post-button {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+    }
+
+    .comment-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-top: 10px;
+    }
+</style>
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="post-form">
+        <form asp-controller="Utilizador" asp-action="CriarPost" method="post">
+            <div class="form-group">
+                <textarea class="form-control" id="Texto" name="Texto" placeholder="Diz-nos o que estás a pensar" rows="3"></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary post-button">Postar</button>
+        </form>
+    </div>
+}
+
+@foreach (var post in Model)
+{
+    <div class="post-container">
+        <p> @post.Utilizador_Autenticado.Username </p>
+        <p>Texto: @post.Texto</p>
+        <p class="post-date">Data: @post.Data_Post</p>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div class="comment-container">
+                <p>Deixa um comentário!</p>
+
+                <form asp-controller="Utilizador" asp-action="Comentar"method="post">
+                    <div class="form-group">
+                        <input type="hidden" name="PostId" value="@post.Id_Post" />
+                        
+                        <textarea class="form-control" id="Comentario" name="Comentario" placeholder="Escreva seu comentário aqui" rows="2"></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Comentar</button>
+                </form>
+            </div>
+
+        }
+    </div>
+}
